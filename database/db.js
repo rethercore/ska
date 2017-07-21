@@ -7,9 +7,8 @@ mongoose.connect('mongodb://'+config.mongodb.host+':'+config.mongodb.port+'/'+co
 
 var SikkaSchemaJSON = {
   Txno: String,
-  PairName : String,
-  ToAddress : String,
-  FromAddress : String,
+  ethAddress : String,
+  btcAddress : String,
   txhash : String,
   InValue : Number,
   OutValue : {

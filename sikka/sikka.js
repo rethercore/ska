@@ -36,7 +36,7 @@ sikkaCore.prototype.init = function (address,callback) {
       if (err) {
         callback({ "Error": [1.1,err] },null);
       }else{
-        callback(null,{ Txno :record.Txno, ethAddr :record.ethAddress } );
+        callback(null,{ Txno :record.Txno, Address :record.ethAddress } );
       }
     })
   }else{
@@ -60,7 +60,7 @@ sikkaCore.prototype.check = function (txno,callback) {
             callback (err1,null);
           }else{
             if (data1.result == 0){
-              callback( null, {state:1})
+              callback( null, {state:1, Address : data[0].ethAddress })
             }else{
               self.btcApi.checkBalance(self.bitcore.fetchAddres(),function(err2,data2){
                 if (err2) {
@@ -87,8 +87,13 @@ sikkaCore.prototype.check = function (txno,callback) {
           }
         });
       }else{
-        query.findOneAndUpdate({Txno: txno}, {state :4}).exec()
-        callback( null, {state:4})
+        console.log(data[0].state);
+        if ( data[0].state == 2 ){
+          callback( null, {state:2, txhash : data[0].txhash, Address : data[0].ethAddress })
+        }else {
+          query.findOneAndUpdate({Txno: txno}, {state :4}).exec()
+          callback( null, {state:4})
+        }
       }
     }
   });

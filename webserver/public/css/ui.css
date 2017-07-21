@@ -1,0 +1,175 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald:400,700,300);
+@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
+#header-left {
+    position: absolute;
+    top: 2.5%;
+    left: 2.5%;
+    width: 50%;
+    height:5%;
+    vertical-align: center;
+}
+#header-right {
+    position: absolute;
+    top: 4%;
+    right: 2.5%;
+    height:4.5%;
+    font-size: 1.5vw;
+    font-family: 'PT Sans', sans-serif;
+    font-weight: lighter;
+    z-index: 1;
+    vertical-align: center;
+}
+#footer-middle {
+    position: absolute;
+    bottom: 3%;
+    left: 25%;
+    width: 50%;
+    height:4.5%;
+    font-size: 1.3vw;
+    z-index: 1;
+    vertical-align: bottom;
+}
+#footer-middle-bottom {
+    position: absolute;
+    bottom: 2%;
+    left: 25%;
+    width: 50%;
+    height:1.5%;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 25%;
+    vertical-align: bottom;
+}
+/* Slide 1 CSS */
+#tag1{
+    font-family: 'Open Sans',sans-serif;
+    font-size: 100%;
+}
+#tag2{
+    font-family: 'PT Sans',sans-serif;
+    font-size: 50%;
+}
+/* All Slide */
+#head{
+    font-family: 'Open Sans',sans-serif;
+    font-size: 150%;
+}
+#pbold{
+    font-family: 'Oswald', sans-serif;
+    font-size: 100%;
+    font-weight:bold;
+}
+#pnormal{
+    font-family: 'PT Sans',sans-serif;
+    font-size:75%;
+}
+#pnormal1{
+    font-family: 'Oswald',sans-serif;
+    font-size:100%;
+}
+#fbox1-1 {
+    width:25%;
+    left:0%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox1-2 {
+    width: 25%;
+    left:25%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox1-3 {
+    width: 25%;
+    left:50%;
+    font-family:'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox1-4 {
+    width: 25%;
+    left:75%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox2-1 {
+    width: 33%;
+    left:0%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox2-2 {
+    width: 33%;
+    left:33%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox2-3 {
+    width: 33%;
+    left:66%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+
+#fbox3-1 {
+    width: 50%;
+    left:0%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+#fbox3-2 {
+    width: 50%;
+    left:50%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 75%;
+    font-weight: bold;
+    position: absolute;
+}
+
+#vbox-head{
+    font-family: 'PT Sans',sans-serif;
+    font-size: 200%;
+    font-weight: bold;
+}
+#vbox-p{
+    font-family: 'PT Sans',sans-serif;
+    font-size: 100%;
+    font-weight: lighter;
+}
+#vbox-p1{
+    font-family: 'PT Sans',sans-serif;
+    font-size: 75%;
+    font-weight: lighter;
+}
+
+#back{
+    font-family: 'PT Sans',sans-serif;
+    font-size: 50%;
+    font-weight: bold;
+}
+#cbox {
+    position: absolute;
+    left: 0;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+#qrcode {
+  left: 50%;
+}
