@@ -62,7 +62,7 @@ app.get('/api/getRate',function(req,res){
   res.status(200).send({ "rate": coin.exchange.rate });
 })
 
-app.use('/', express.static(path.resolve() + '/webserver/public'));
+app.use('/', express.static('./webserver/public'));
 
 app.listen(config.web.port,() => {
   console.info(`server started on port ${config.web.port} `);
