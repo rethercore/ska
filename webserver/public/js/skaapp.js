@@ -25,10 +25,6 @@ if (url.searchParams.get("id") != null){
   })
 }else{
   $("#p1").show();
-  $("#p2").hide();
-  $("#p3").hide();
-  $("#p4").hide();
-  $("#p5").hide();
 }
 
 $.get('./api/getRate', function(data){
@@ -51,9 +47,11 @@ $("#p1b").submit(function(e){
 $("#p2b").submit(function(e){
   e.preventDefault();
   $("#p2").hide();
+  $("#p3").show();
   var addr = $("#i1addr").val();
   console.log($("#i1addr"),addr);
   $.get("/api/init?address="+ $("#i1addr").val() ).done(function(data) {
+    console.log(data);
     $("#p3").show();
     new QRCode(document.getElementById("qrcode"), "0x"+ data.Address);
     $("h4").text("0x"+data.Address);
