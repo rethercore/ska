@@ -31,6 +31,9 @@ if (url.searchParams.get("id") != null){
   $("#p5").hide();
 }
 
+$.get('./api/getRate', function(data){
+    $('#rate').text(data.rate)
+});
 
 var getID = function(id) {
   $.get("/check?id="+ id , function(data){

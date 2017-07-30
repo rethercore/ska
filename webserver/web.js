@@ -4,7 +4,7 @@ var morgan = require('morgan');
 var path = require('path');
 var fs = require('fs');
 var rfs = require('rotating-file-stream')
-
+var sch = require('node-schedule');
 var coin = new sikka();
 var config = require('../config/web.json');
 
@@ -19,6 +19,14 @@ var accessLogStream = rfs('access.log', {
 })
 
 app.use(morgan('combined', {stream: accessLogStream}));
+
+var j = sch.scheduleJob('/1 * * * * *', function(){
+  coin.exchange.getBTCrate(function(error,result){
+    if(error){
+      console.log("Error fetching current rate");
+    }
+  })
+})
 
 app.get('/api/init',function(req,res){
   coin.init(req.query.address,function(err,data){
@@ -48,6 +56,10 @@ app.get('/api/fetchTxn',function(req,res){
       res.status(200).send(data);
     }
   })
+})
+
+app.get('/api/getRate',function(req,res){
+  res.status(200).send({ "rate": coin.exchange.rate });
 })
 
 app.use('/', express.static(path.resolve() + '/webserver/public'));

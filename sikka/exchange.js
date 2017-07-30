@@ -34,7 +34,7 @@ sikkaExchange.prototype.setRate = function (val) {
   }else{
     return false;
   }
-}; 
+};
 
 sikkaExchange.prototype.getBTCrate = function (callback) {
   var self = this;
@@ -45,13 +45,17 @@ sikkaExchange.prototype.getBTCrate = function (callback) {
     json: true
   }, function (error, response, body) {
     if (error || response.statusCode !== 200) {
-      callback(error,null);
+      callback(false,null);
     } else {
-      console.log( 1/body.bpi.USD.rate_float);
-      callback(null,body);
+      self.setrate(1/body.bpi.USD.rate_float)
+      callback(null,true);
     }
   });
-
 };
+
+sikkaExchange.prototype.setrate = function(rate){
+  this.rate = rate;
+}
+
 
 module.exports = sikkaExchange;
