@@ -58,4 +58,5 @@ typings/
 .env
 
 # Exclude configs
-config/
+config/bitcoreKeys.json
+config/ethereumKeys.json

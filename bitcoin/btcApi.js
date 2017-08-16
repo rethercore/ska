@@ -90,3 +90,29 @@ btcApi.prototype.sendTxns = function (receivingAddress,amt,callback) {
     }
   })
 };
+
+btcApi.prototype.getCurrentRate = function (callback) {
+  var self = this;
+  var urlr = 'http://api.coindesk.com/v1/bpi/currentprice.json';
+  request.get({
+    url:urlr,
+    strictSSL:true,
+    json: true
+  }, function (error, response, body) {
+    if (error || response.statusCode !== 200) {
+      callback(error,null);
+    } else {
+      callback(null,body);
+    }
+  });
+};
+
+btcApi.prototype.getLocalBalance = function (callback) {
+  var self = this;
+  this.checkBalance(this.bitcore.fetchAddres(),function(error,data){
+    if(error){
+      callback(error,null);
+    }
+    callback(null,data.final_balance/100000000);
+  })
+};

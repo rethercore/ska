@@ -1,0 +1,34 @@
+{
+  "BTC/SKA":{
+    "auto"    : true,
+    "address" : ""
+  },
+  "SKA/BTC":{
+    "auto"    : true,
+    "address" : ""
+  },
+  "ETH/SKA":{
+    "auto"    : false,
+    "address" : ""
+  },
+  "SKA/ETH":{
+    "auto"    : false,
+    "address" : ""
+  },
+  "BCH/SKA":{
+    "auto"    : false,
+    "address" : ""
+  },
+  "SKA/BCH":{
+    "auto"    : false,
+    "address" : ""
+  },
+  "MCAP/SKA":{
+    "auto"    : false,
+    "address" : ""
+  },
+  "SKA/MCAP":{
+    "auto"    : false,
+    "address" : ""
+  }
+}

@@ -51,3 +51,7 @@ bitcore.prototype.sign = function (msg) {
 bitcore.prototype.addressValid = function (addr) {
   return this.bitcore.Address.isValid(addr);
 };
+
+bitcore.prototype.deriveAddress = function (seq) {
+  return this.bitcore.HDPrivateKey(keys.bitcoin.HDPrivatekey).derive(seq).privateKey.toAddress().toString();
+};

@@ -1,14 +1,32 @@
-var sikka = require('../sikka/sikka');
+global = require('../sikka/global');
 var express = require('express');
 var morgan = require('morgan');
+var bodyParser = require('body-parser')
+var { validate, ValidationError } = require('express-json-validator');
 var path = require('path');
 var fs = require('fs');
 var rfs = require('rotating-file-stream')
-var sch = require('node-schedule');
+var sikka = require('../sikka/sikka');
 var coin = new sikka();
 var config = require('../config/web.json');
 
+var json_body_parser = bodyParser.json();
+var urlencoded_body_parser = bodyParser.urlencoded({ extended: true });
+
+
+var schemaInit = {
+  properties: {
+    Exchange  : { type: 'string' },
+    C1Addr    : { type: 'string' },
+    C2Addr    : { type: 'string' },
+    C1Value   : { type: 'number' },
+    C2Value   : { type: 'number' }
+},
+  required: [ 'Exchange', 'C1Addr', 'C2Addr', 'C1Value' , 'C2Value' ]
+};
+
 var app  = express();
+
 
 var logDirectory = path.join(__dirname, '../log')
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
@@ -20,16 +38,21 @@ var accessLogStream = rfs('access.log', {
 
 app.use(morgan('combined', {stream: accessLogStream}));
 
-var j = sch.scheduleJob('/1 * * * * *', function(){
-  coin.exchange.getBTCrate(function(error,result){
-    if(error){
-      console.log("Error fetching current rate");
+// Add Validation
+app.post('/api/v1/startTx', function(req,res){
+  console.log("Test",req.body);
+  coin.startTx(req.body,function(err,data){
+    console.log(err,data);
+    if(err){
+      res.status(500).send({ "Error": err });
+    }else{
+      res.status(200).send(data);
     }
-  })
-})
+  });
+});
 
-app.get('/api/init',function(req,res){
-  coin.init(req.query.address,function(err,data){
+app.get('/api/v1/fetchId',function(req,res){
+  coin.fetchTxid(req.query.Txid,function(err,data){
     if(err){
       res.status(500).send({ "Error": err });
     }else{
@@ -38,31 +61,18 @@ app.get('/api/init',function(req,res){
   })
 })
 
-app.get('/api/check',function(req,res){
-  coin.check(req.query.id,function(err,data){
-    if(err){
-      res.status(500).send({ "Error": err });
-    }else{
-      res.status(200).send(data);
-    }
-  })
+app.get('/api/v1/getRates',function(req,res){
+  res.status(200).send(coin.rates);
 })
 
-app.get('/api/fetchTxn',function(req,res){
-  coin.fetchTxn(req.query.id,function(err,data){
-    if(err){
-      res.status(500).send({ "Error": err });
-    }else{
-      res.status(200).send(data);
-    }
-  })
-})
-
-app.get('/api/getRate',function(req,res){
-  res.status(200).send({ "rate": coin.exchange.rate });
+app.get('/api/v1/getBalance',function(req,res){
+  res.status(200).send(coin.balance);
 })
 
 app.use('/', express.static('./webserver/public'));
+
+app.use(json_body_parser);
+app.use(urlencoded_body_parser);
 
 app.listen(config.web.port,() => {
   console.info(`server started on port ${config.web.port} `);

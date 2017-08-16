@@ -1,0 +1,17 @@
+{
+  "Txid"      : "asdadasdasdasdasdasd",
+  "TxAddr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "TxKey"     : 123,
+  "TxState"   : 4,
+  "InHash"    : "",
+  "OutHash"   : "sdadasdasdsa",
+  "Rate"      : 1,
+  "Exchange"  : "BTC/SKA",
+  "C1Addr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "C2Addr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "C1Value"   : 10,
+  "C2Value"   : 10,
+  "StartDate" : "2017-08-12T19:55:03.794Z",
+  "EndDate"   : "2017-08-12T20:55:03.794Z",
+  "Version"   : 1
+}

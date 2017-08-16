@@ -1,127 +1,114 @@
-var bitcore = require('../bitcoin/bitcore');
-var ethcore = require('../ethereum/ethcore');
 var btcApi  = require('../bitcoin/btcApi');
-var ethApi  = require('../ethereum/ethApi');
-var db      = require('../database/db');
-var exchange= require('./exchange');
+var skaApi  = require('../ethereum/sikkaInterface');
+var init    = require('./initializer');
 
 var sikkaCore = function() {
   if (!(this instanceof sikkaCore)) {
 		return new sikkaCore();
 	}
-  this.bitcore = new bitcore();
-  this.ethcore = new ethcore();
-  this.btcApi  = new btcApi();
-  this.ethApi  = new ethApi();
-  this.db      = new db();
-  this.exchange= new exchange();
+  this.db      = global.db;
+  this.init    = new init();
+  this.balance = global.sch.RateCard.balance;
+  this.rates   = global.sch.RateCard.rate;
 }
 
-sikkaCore.prototype.init = function (address,callback) {
-  var self = this;
-  var date = new Date();
-  if (self.bitcore.addressValid(address)){
-    var txno = self.ethcore.generateRandom();
-    var ethAddr = self.ethcore.generateAddress(txno);
-    var record = {
-      Txno :  txno,
-      ethAddress : ethAddr.address,
-      btcAddress : address,
-      EthKeyObj : ethAddr,
-      state : 1,
-      EndDate : new Date(date.setTime( date.getTime() + 3 * 86400000 )),
-      StartDate : new Date()
-    }
-    self.db.sikkaModel.create(record,function(err,small){
-      if (err) {
-        callback({ "Error": [1.1,err] },null);
-      }else{
-        callback(null,{ Txno :record.Txno, Address :record.ethAddress } );
-      }
-    })
-  }else{
-    callback({ "Error": [1.2,"Invalid BTC address"] },null);
-  }
-};
 
-sikkaCore.prototype.check = function (txno,callback) {
+sikkaCore.prototype.startTx = function (initObj,callback) {
   var self = this;
-  self.db.sikkaModel.find( { Txno : txno },function(err,data){
+  if( initObj.Exchange == 'BTC/SKA'){
+    console.log("E");
+    self.init.btcska(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    });
+  }else if( initObj.Exchange == 'SKA/BTC' ){
+    self.init.skabtc(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'ETH/SKA' ){
+    self.init.ethska(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'SKA/ETH' ){
+    self.init.skaeth(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'MCAP/SKA' ){
+    self.init.mcapska(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'SKA/MCAP' ){
+    self.init.skamcap(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'BCH/SKA' ){
+    self.init.bchska(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }else if( initObj.Exchange == 'SKA/BCH' ){
+    self.init.skabch(initObj,function(err,data){
+      if(err){
+        callback(err,null)
+      }
+      callback(null,data)
+    })
+  }
+}
+sikkaCore.prototype.fetchTxid = function (id,callback) {
+  var self = this;
+  self.db.sikkaModel.find( { Txno : id },function(err,data){
     if (err) {
-      callback (null,err);
+      callback (err,null);
     }else{
-      var query = self.db.sikkaModel.find( { Txno : txno});
-      var expDate = new Date(data[0].EndDate)
-      var now = new Date();
-      console.log(expDate.getTime()>now.getTime(),expDate.getTime(),now.getTime());
-      if( expDate.getTime() > now.getTime() && data[0].state == 1 ){
-        self.ethApi.checkTokenBalance(data[0].ethAddress,function(err1,data1){
-          if (err1) {
-            callback (err1,null);
-          }else{
-            if (data1.result == 0){
-              callback( null, {state:1, Address : data[0].ethAddress })
-            }else{
-              self.btcApi.checkBalance(self.bitcore.fetchAddres(),function(err2,data2){
-                if (err2) {
-                  callback (err2,null);
-                }else{
-                  var eb = self.exchange.sikkaExE2B(data1.result);
-                  console.log(eb,data1.result);
-                  if( eb <= (data2.balance-2000) ){
-                    self.btcApi.sendTxns(data[0].btcAddress,eb,function(err3,data3){
-                      if(err3){
-                        callback(err3,null);
-                      }else{
-                        query.findOneAndUpdate({Txno: txno}, {state :2,  InValue : data1.result, txhash : data3.tx.hash, OutValue : { ethereum : 0, bitcoin : eb, IsOverFlow : false}}).exec()
-                        callback(null,{ state:2, txhash : data3.tx.hash })
-                      }
-                    })
-                  }else{
-                    query.findOneAndUpdate({Txno: txno}, {state :3,  InValue : data1.result, OutValue : { ethereum : 0, bitcoin : eb, IsOverFlow : true}}).exec()
-                    callback(null,{ state:3  })
-                  }
-                }
-              });
-            }
-          }
-        });
+      console.log(data);
+      if(data.length != 0){
+        callback ( null, data[0] );
       }else{
-        console.log(data[0].state);
-        if ( data[0].state == 2 ){
-          callback( null, {state:2, txhash : data[0].txhash, Address : data[0].ethAddress })
-        }else {
-          query.findOneAndUpdate({Txno: txno}, {state :4}).exec()
-          callback( null, {state:4})
-        }
+        callback ('No Record Found',null);
       }
     }
   });
 };
 
-
-sikkaCore.prototype.fetchTxn = function (txno,callback) {
-  var self = this;
-  self.db.sikkaModel.find( { Txno : txno },function(err,data){
-    if (err) {
-      callback (err,null);
-    }else{
-      var expDate = new Date(data[0].EndDate)
-      var now = new Date();
-      if( expDate.getTime() > now.getTime() && data[0].state == 1 ){
-        callback (null,{ Address : data[0].ethAddress , State : data[0].state , StartDate : data[0].StartDate , EndDate : data[0].EndDate });
-      }else{
-        if( data[0].state == 2 ){
-          callback (null,{ Txhash : data[0].txhash , State : data[0].state });
-        } else if ( data[0].state == 3 ){
-          callback (null,{ "Error" : "Overflow Detected", State : data[0].state});
-
-        } else if ( data[0].state == 4 ){
-          callback (null,{ "Error" : "Expired", State : data[0].state});
-        }
-      }
-    }
-  })
-};
-
 module.exports = sikkaCore;
+
+/*
+Test Tx ID
+var record = {
+  "Txid"      : "asdadasdasdasdasdasd",
+  "TxAddr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "TxKey"     : 123,
+  "TxState"   : 1,
+  "InHash"    : "",
+  "OutHash"   : "",
+  "Rate"      : 1,
+  "Exchange"  : "BTC/SKA",
+  "C1Addr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "C2Addr"    : "1JU368qm7eJdVprTDBp2yXjwx3myhVA938",
+  "C1Value"   : 10,
+  "C2Value"   : 10,
+  "StartDate" : "2017-08-12T19:55:03.794Z",
+  "EndDate"   : "2017-08-12T20:55:03.794Z",
+  "Version"   : 1
+};
+*/
