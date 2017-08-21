@@ -1,5 +1,25 @@
 {
   "ethereum":{
     "secret":"04821bbccc1326b68ffd88e34fa2be6398173c60f649ac611b7ec5a2a69b7a3c"
-  }
+  },
+  "accounts" :{
+    "address": "436f2022eccaf47ab11a676464e57d778ca6e033",
+    "crypto":{
+        "cipher": "aes-128-ctr",
+      "ciphertext": "8a55924a608f5fca2dd181331d5285668c4834b48635ceac132728f0d243ddd0",
+      "cipherparams": {
+        "iv": "344ca392a0473f31a64c1e130b4a670c"
+      },
+      "mac": "78c724456af9e660369b8851dc99656706c72041a07426f208dfbb540f5ef780",
+      "kdf": "pbkdf2",
+      "kdfparams":{
+        "c": 262144,
+        "dklen": 32,
+        "prf": "hmac-sha256",
+        "salt": "5694de678ac77c9aae027eabdad647e15dc1cfacdd763f3a7950663bde0077c2"
+        }
+      },
+      "id": "d5e565fc-dd8e-4a27-93eb-bba0ed770ea5",
+      "version": 3
+    }
 }

@@ -10,10 +10,6 @@ var sikka = require('../sikka/sikka');
 var coin = new sikka();
 var config = require('../config/web.json');
 
-var json_body_parser = bodyParser.json();
-var urlencoded_body_parser = bodyParser.urlencoded({ extended: true });
-
-
 var schemaInit = {
   properties: {
     Exchange  : { type: 'string' },
@@ -37,12 +33,11 @@ var accessLogStream = rfs('access.log', {
 })
 
 app.use(morgan('combined', {stream: accessLogStream}));
+app.use(bodyParser());
 
 // Add Validation
 app.post('/api/v1/startTx', function(req,res){
-  console.log("Test",req.body);
   coin.startTx(req.body,function(err,data){
-    console.log(err,data);
     if(err){
       res.status(500).send({ "Error": err });
     }else{
@@ -69,10 +64,7 @@ app.get('/api/v1/getBalance',function(req,res){
   res.status(200).send(coin.balance);
 })
 
-app.use('/', express.static('./webserver/public'));
-
-app.use(json_body_parser);
-app.use(urlencoded_body_parser);
+app.use('/', express.static(path.resolve('./webserver/public')));
 
 app.listen(config.web.port,() => {
   console.info(`server started on port ${config.web.port} `);

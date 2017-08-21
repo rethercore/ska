@@ -1,0 +1,14 @@
+Txid
+TxAddr
+TxKey
+TxState
+InHash
+OutHash
+Rate
+Exchange
+C1Addr
+C2Addr
+C1Value
+C2Value
+StartDate
+EndDate

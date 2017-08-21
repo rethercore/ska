@@ -8,27 +8,27 @@
     "address" : ""
   },
   "ETH/SKA":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   },
   "SKA/ETH":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   },
   "BCH/SKA":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   },
   "SKA/BCH":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   },
   "MCAP/SKA":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   },
   "SKA/MCAP":{
-    "auto"    : false,
+    "auto"    : true,
     "address" : ""
   }
 }

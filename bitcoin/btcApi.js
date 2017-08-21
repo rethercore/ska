@@ -36,7 +36,6 @@ btcApi.prototype.newTxn = function(receivingAddress,amt,callback) {
 	var self = this;
 	var urlr = URL_ROOT + 'btc/main/txs/new?token=' + config.bitcoin.token;
 	params = {"inputs":[{"wallet_name":config.bitcoin.wallet_name}],"outputs":[{"addresses": [receivingAddress], "value": amt}]};
-	console.log(JSON.stringify(params),urlr);
 	request.post({
 		url:urlr,
 		strictSSL:true,
@@ -44,10 +43,8 @@ btcApi.prototype.newTxn = function(receivingAddress,amt,callback) {
 		body: params
 	}, function (error, response, body) {
 		if (error || (response.statusCode !== 200 && response.statusCode !== 201)) {
-      console.log(error);
       callback(error,null);
 		} else {
-      console.log(body);
 			callback(null,body);
 		}
 	});
